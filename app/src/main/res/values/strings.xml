@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Call/Send</string>
+    <string name="entering_phone_number">Введите номер телефона</string>
+    <string name="message_input">Введите сообщение</string>
+    <string name="call">Звоним</string>
+    <string name="send">Отправляем</string>
+    <string name="enter_phone_number">Введите номер телефона</string>
+    <string name="enter_text">Введите номер телефона и текст сообщения</string>
+</resources>
