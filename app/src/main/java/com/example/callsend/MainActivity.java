@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.telephony.SmsManager;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -53,7 +54,27 @@ public class MainActivity extends AppCompatActivity {
             Uri uri = Uri.parse("tel:" + number);
             openPhone.setData(uri);
             startActivity(openPhone);
-            startActivity(openPhone);
+        }
+    }
+
+    public void goToSend(View view) {
+        final String number = phone.getText().toString();
+        final String text = message.getText().toString();
+        if (text.length() > 0 && number.length() > 0) {
+            sendMessage();
+        } else {
+            Toast.makeText(MainActivity.this, R.string.enter_text, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void sendMessage() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SEND_SMS}, MY_PERMISSIONS_REQUEST_SEND_SMS);
+        } else {
+            Intent openSms = new Intent(Intent.ACTION_VIEW);
+            SmsManager smgr = SmsManager.getDefault();
+            smgr.sendTextMessage(String.valueOf(R.id.et_phone), null, String.valueOf(R.id.et_message), null, null);
+            startActivity(Intent.createChooser(openSms, "Отправить смс с помощью"));
         }
     }
 
@@ -65,24 +86,12 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 finish();
             }
+        } else if (requestCode == MY_PERMISSIONS_REQUEST_SEND_SMS) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                sendMessage();
+            } else {
+                finish();
+            }
         }
-    }
-
-    public void goToSend(View view) {
-//        Intent openSmsManager = new Intent(Intent.ACTION_VIEW);
-//        Uri uri;
-//        if (text.length() > 0 && number.length() > 0) {
-//            uri = Uri.parse("smsto:" + text);
-//            openSmsManager.setData(uri);
-//            if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
-//                ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.SEND_SMS}, MY_PERMISSIONS_REQUEST_SEND_SMS);
-//            } else {
-//                SmsManager smgr = SmsManager.getDefault();
-//                smgr.sendTextMessage(number,null,text,null,null);
-//                startActivity(openSmsManager);
-//            }
-//        } else {
-//            Toast.makeText(MainActivity.this, R.string.enter_text, Toast.LENGTH_SHORT).show();
-//        }
     }
 }
