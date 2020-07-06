@@ -71,10 +71,10 @@ public class MainActivity extends AppCompatActivity {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SEND_SMS}, MY_PERMISSIONS_REQUEST_SEND_SMS);
         } else {
-            Intent openSms = new Intent(Intent.ACTION_VIEW);
+            final String number = phone.getText().toString();
+            final String text = message.getText().toString();
             SmsManager smgr = SmsManager.getDefault();
-            smgr.sendTextMessage(String.valueOf(R.id.et_phone), null, String.valueOf(R.id.et_message), null, null);
-            startActivity(Intent.createChooser(openSms, "Отправить смс с помощью"));
+            smgr.sendTextMessage(number, null, text, null, null);
         }
     }
 
